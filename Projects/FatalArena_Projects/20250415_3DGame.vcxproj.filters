@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{d5666ee5-f200-4578-8fa6-7509d24d47ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{0842e944-59dd-40f4-accc-9e3afcc7f719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{c142d989-dce9-4fc0-8ad5-4edb0b1643b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{79e68a55-50d4-4fdc-9b79-6000c7340128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Player">
+      <UniqueIdentifier>{31614ffb-921c-4e76-a414-789c13cf9536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Enemy">
+      <UniqueIdentifier>{3c7042a9-be9b-4cc9-b1cf-d3750dcff7c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{2969f62d-8171-44e1-9962-8d4dd2afee61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Weapon">
+      <UniqueIdentifier>{c3cfec2e-aaa3-480c-9f48-5062a95e6421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\SceneResult">
+      <UniqueIdentifier>{18967677-0c0f-491a-bd21-7fd37ae3eadb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\SceneGamePlay">
+      <UniqueIdentifier>{f19db1e2-d78d-4cc2-8efa-734912936295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Item">
+      <UniqueIdentifier>{cfb1adcd-8b01-45ae-b6c5-225604afc128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\SceneGamePlay\Enemy">
+      <UniqueIdentifier>{ccf3e4f1-7213-4f49-a2f9-bc506804e982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\SceneGamePlay\Wave">
+      <UniqueIdentifier>{2ec54d7d-c5fb-4a9b-949c-5d18069af08d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\SceneGamePlay\Item">
+      <UniqueIdentifier>{a442ae4f-cae2-42fb-92b3-928fa8a2ff59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Billboard">
+      <UniqueIdentifier>{4e1ad404-4188-45e4-8a9f-674bf21b7e8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\SceneGamePlay\ReinforcementPopup">
+      <UniqueIdentifier>{627db610-279a-4132-ae45-cacc06da80b2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Matrix4x4.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="StringUtility.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Statistics.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTitle.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneResult.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGamePlay.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneController.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneBase.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderData.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Rigidbody.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderDataSphere.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderDataCapsule.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderDataInvertedCylinder.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneOperationInstruction.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBoss.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyNormal.cpp">
+      <Filter>Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Object\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponEnemy.cpp">
+      <Filter>Object\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponPlayer.cpp">
+      <Filter>Object\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Arena.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugDraw.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultDisplay.cpp">
+      <Filter>System\SceneResult</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultItemDrawer.cpp">
+      <Filter>System\SceneResult</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusUI.cpp">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Skydome.cpp">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBase.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemHeal.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemScoreBoost.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemStrength.cpp">
+      <Filter>Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyFactory.cpp">
+      <Filter>System\SceneGamePlay\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>System\SceneGamePlay\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveAnnouncer.cpp">
+      <Filter>System\SceneGamePlay\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveData.cpp">
+      <Filter>System\SceneGamePlay\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveManager.cpp">
+      <Filter>System\SceneGamePlay\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemFactory.cpp">
+      <Filter>System\SceneGamePlay\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>System\SceneGamePlay\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBuffManager.cpp">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="BillboardAudience.cpp">
+      <Filter>Object\Billboard</Filter>
+    </ClCompile>
+    <ClCompile Include="BillboardManager.cpp">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="PopupManager.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="PopupBase.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="ReinforcementCard.cpp">
+      <Filter>System\SceneGamePlay\ReinforcementPopup</Filter>
+    </ClCompile>
+    <ClCompile Include="PopupPlayerReinforcement.cpp">
+      <Filter>System\SceneGamePlay\ReinforcementPopup</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerReinforcementManager.cpp">
+      <Filter>System\SceneGamePlay\ReinforcementPopup</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBuffGaugeDrawer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StringUtility.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Statistics.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneBase.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneController.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGamePlay.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneResult.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTitle.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectSettings.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderData.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderDataSphere.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderDataCapsule.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderDataInvertedCylinder.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneOperationInstruction.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyNormal.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponPlayer.h">
+      <Filter>Object\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Object\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponEnemy.h">
+      <Filter>Object\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Arena.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugDraw.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultDisplay.h">
+      <Filter>System\SceneResult</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultItemDrawer.h">
+      <Filter>System\SceneResult</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusUI.h">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Calculation.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome.h">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBase.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemHeal.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemScoreBoost.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBoss.h">
+      <Filter>Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemStrength.h">
+      <Filter>Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyFactory.h">
+      <Filter>System\SceneGamePlay\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>System\SceneGamePlay\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveAnnouncer.h">
+      <Filter>System\SceneGamePlay\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveData.h">
+      <Filter>System\SceneGamePlay\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveManager.h">
+      <Filter>System\SceneGamePlay\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemFactory.h">
+      <Filter>System\SceneGamePlay\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>System\SceneGamePlay\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBuffManager.h">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="BillboardAudience.h">
+      <Filter>Object\Billboard</Filter>
+    </ClInclude>
+    <ClInclude Include="BillboardManager.h">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="PopupManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="PopupBase.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="ReinforcementCard.h">
+      <Filter>System\SceneGamePlay\ReinforcementPopup</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerReinforcementManager.h">
+      <Filter>System\SceneGamePlay\ReinforcementPopup</Filter>
+    </ClInclude>
+    <ClInclude Include="PopupPlayerReinforcement.h">
+      <Filter>System\SceneGamePlay\ReinforcementPopup</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBuffGaugeDrawer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

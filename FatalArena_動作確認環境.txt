@@ -1,0 +1,4 @@
+FatalArena_動作確認環境
+
+OS  : Windows 11
+GPU : Intel Core i7-13700
