@@ -32,7 +32,6 @@ public:
 	// 当たり判定を無視するタグのリスト
 	std::list<PhysicsData::GameObjectTag>	throughTags;
 
-	// MEMO:ここpublicにしたら問題あるかな
 public:
 
 	PhysicsData::ColliderKind	kind;

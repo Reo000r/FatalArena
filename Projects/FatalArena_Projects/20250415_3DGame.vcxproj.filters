@@ -244,7 +244,7 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="PlayerBuffGaugeDrawer.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>System\SceneGamePlay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -435,7 +435,7 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBuffGaugeDrawer.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>System\SceneGamePlay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
