@@ -203,7 +203,7 @@ void Camera::UpdateNormal()
 	SetMousePoint(static_cast<int>(Statistics::kScreenCenterWidth),
 		static_cast<int>(Statistics::kScreenCenterHeight));
 
-	Vector3 rotAngle = Vector3(0.0f, stick.x * 0.001f * kRotSpeedY, 0.0f);
+	Vector3 rotAngle = Vector3(0.0f, stick.x * -0.001f * kRotSpeedY, 0.0f);
 
 	CameraUpdate(rotAngle, kDefaultCameraFollowLerpFactor, false);
 }

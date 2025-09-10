@@ -22,7 +22,7 @@ namespace {
 	constexpr float kGround = 0.0f;								// (地面の高さ)
 	constexpr int kReactCooltimeFrame = 30;						// 無敵時間
 
-	constexpr float kAttackPower = 200.0f;						// 攻撃力
+	constexpr float kAttackPower = 100.0f;						// 攻撃力
 	constexpr int kAddScore = 1000;								// 加算スコア
 	
 	constexpr float kChaseDist = 1200.0f;						// 追い始める距離

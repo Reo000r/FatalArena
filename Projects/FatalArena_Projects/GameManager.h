@@ -23,7 +23,7 @@ private:
 public:
 	// タイムボーナス計算用の定数
 	static constexpr float kMaxBonusTime = (0 * 60.0f + 0.0f);	// 最大ボーナスがもらえるタイム（秒）
-	static constexpr float kMinBonusTime = (2 * 60.0f + 0.0f);	// 最小ボーナスがもらえるタイム（秒）
+	static constexpr float kMinBonusTime = (5 * 60.0f + 0.0f);	// 最小ボーナスがもらえるタイム（秒）
 	static constexpr int kMaxTimeBonusScore = 100000;	// 最大ボーナススコア
 	static constexpr int kMinTimeBonusScore = 500;		// 最小ボーナススコア
 	
@@ -48,6 +48,9 @@ public:
 	/// 毎フレームの更新処理
 	/// </summary>
 	void Update();
+
+	void SetClearState(bool isCleear) { _isClear = isCleear; }
+	bool GetClearState() { return _isClear; }
 
 	/// <summary>
 	/// 初回プレイ状態を更新
@@ -98,7 +101,7 @@ public:
 	int GetCurrentWaveIndex() const;
 	int GetTotalWaves() const;
 	bool IsPlayerAlive() const;
-	bool IsFirstPlay() const { return _isFirstPlay; };
+	bool IsFirstPlay() const { return _isFirstPlay; }
 
 private:
 	
@@ -112,6 +115,7 @@ private:
 	int _timeBonusScore;
 
 	int _isFirstPlay;
+	int _isClear;
 
 	// リザルト画面用のスクリーンハンドル
 	int _resultScreenHandle;

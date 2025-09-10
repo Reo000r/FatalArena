@@ -30,8 +30,11 @@ SceneResult::~SceneResult()
 
 void SceneResult::Init()
 {
-	// リザルト表示の前にタイムボーナスを計算させる
-	GameManager::GetInstance().CalculateTimeBonus();
+	// クリアしていた場合は
+	if (GameManager::GetInstance().GetClearState()) {
+		// リザルト表示の前にタイムボーナスを計算させる
+		GameManager::GetInstance().CalculateTimeBonus();
+	}
 
 	_resultDisplay->Init();
 

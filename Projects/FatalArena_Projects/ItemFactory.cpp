@@ -32,8 +32,8 @@ namespace {
 	// ヒール用
 	const Vector3 kModelHealTransOffset = Vector3(0, -kColRadius, 0);
 	const float kHealTotalFrame = 60.0f * 1.0f;					// 効果時間
-	//const float kHealAmount = (Player::GetMaxHitPoint() * 0.4f) / kHealTotalFrame;	// 1f当たりの回復量
-	
+	constexpr float kHealDim = 1.0f;	// 回復量(最大HP割合)
+
 	// スコア増加用
 	const Vector3 kModelScoreBoostTransOffset = Vector3(0, -kColRadius, 0);
 	const float kScoreBoostTotalFrame = 60.0f * 10.0f;	// 効果時間
@@ -95,7 +95,7 @@ std::shared_ptr<ItemBase> ItemFactory::CreateAndRegister(
 		data.type = type;
 		data.activeFrame = static_cast<int>(kHealTotalFrame);
 		data.maxActiveFrame = static_cast<int>(kHealTotalFrame);
-		const float healAmount = (Player::GetMaxHitPoint() * 0.4f) / kHealTotalFrame;	// 1f当たりの回復量
+		const float healAmount = (Player::GetMaxHitPoint() * kHealDim) / kHealTotalFrame;	// 1f当たりの回復量
 		data.amount = healAmount;
 		data.isActive = true;
 		auto itemHeal = std::make_shared<ItemHeal>(data, duplicatedHandle, manager);
