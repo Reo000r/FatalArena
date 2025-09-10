@@ -83,6 +83,35 @@ const std::vector<std::shared_ptr<EnemyBase>>& EnemyManager::GetEnemies() const
     return _enemies;
 }
 
+std::weak_ptr<EnemyBase> EnemyManager::GetNearestEnemy(Position3 pos, EnemyType type, bool isDead)
+{
+    // 返す敵のタイプ
+    EnemyType retType = type;
+    std::weak_ptr<EnemyBase> ret;
+    if (retType == EnemyType::TypeNum) retType = EnemyType::None;
+    float nearestDist = FLT_MAX;
+
+    for (const std::shared_ptr<EnemyBase> enemy : _enemies) {
+        // 死んでいる敵を除外するかつ
+        // 敵が死んでいるなら
+        if (!isDead && !enemy->IsAlive()) continue;
+        // タイプがNoneもしくは
+        // タイプが一致しているなら
+        if (retType == EnemyType::None ||
+            enemy->GetType() == retType) {
+            // 距離を測り既存値以内なら
+            float dist = (enemy->GetPos() - pos).Magnitude();
+            if (dist < nearestDist) {
+                // 情報を更新する
+                nearestDist = dist;
+                ret = enemy;
+            }
+        }
+    }
+
+    return ret;
+}
+
 void EnemyManager::CleanupDefeatedEnemies()
 {
     // StateがDeadの敵をvectorの末尾に集めてから削除する

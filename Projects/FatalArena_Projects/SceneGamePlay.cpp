@@ -70,7 +70,7 @@ void SceneGamePlay::Init()
 
 	// 初期化処理
 	_camera->Init(_player);
-	_player->Init(_camera, _physics, _playerBuffManager);
+	_player->Init(_camera, _physics, _playerBuffManager, _enemyManager);
 	_skydome->Init(_camera);
 	_arena->Init(_physics);
 
@@ -90,6 +90,7 @@ void SceneGamePlay::Update()
 {
 	// ポップアップを操作する可能性があるなら
 	if (_waveManager->CanReinforcement()) {
+	//if (false) {
 
 		// ゲームが進行中なら
 		if (_isProgress) {

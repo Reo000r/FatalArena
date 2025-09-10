@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "EnemyBase.h"
+#include "EnemyFactory.h"
 
 class EnemyBoss final : public EnemyBase
 {
@@ -9,6 +10,12 @@ class EnemyBoss final : public EnemyBase
 	void Init(std::weak_ptr<Player> player, std::weak_ptr<Physics> physics) override;
 	void Update() override;
 	void Draw() override;
+
+	/// <summary>
+	/// 敵タイプを返す
+	/// </summary>
+	/// <returns></returns>
+	EnemyType GetType() const override { return EnemyType::Boss; }
 
 	float GetMaxHitPoint() const override;
 	float GetAttackPower() const override;

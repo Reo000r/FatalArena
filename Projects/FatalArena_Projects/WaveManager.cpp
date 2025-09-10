@@ -65,7 +65,6 @@ void WaveManager::Update()
 			_itemManager.lock()->SpawnItem(spawnType);
 		}
 		_state = State::InProgress;
-
 	}
 	break;
 	case State::InProgress:
@@ -88,12 +87,13 @@ void WaveManager::Update()
 
 void WaveManager::StartAnnounce()
 {
-	_waveAnnouncer.lock()->Start(_currentWaveIndex + 1);
+	_waveAnnouncer.lock()->Start(_currentWaveIndex + 1, kTotalWaves);
 }
 
 void WaveManager::CheckWaveCompletion()
 {
 	if (_enemyManager.lock()->AreAllEnemiesDefeated()) {
+		//_state = State::WaitingForCleanup;
 		// 最後のウェーブかどうかで分岐
 		if (_currentWaveIndex < GetTotalWaveCount() - 1) {
 			_state = State::ReinforcementSelect;
@@ -109,7 +109,7 @@ void WaveManager::TransitionToNextWave()
 {
 	_currentWaveIndex++;
 	if (_currentWaveIndex < GetTotalWaveCount()) {
-		_waveAnnouncer.lock()->Start(_currentWaveIndex + 1);
+		_waveAnnouncer.lock()->Start(_currentWaveIndex + 1, kTotalWaves);
 		_state = State::Announcing;
 	}
 	else {

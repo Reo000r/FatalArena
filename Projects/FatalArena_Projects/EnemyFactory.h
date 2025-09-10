@@ -10,6 +10,9 @@ class Physics;
 
 enum class EnemyType {
 	Normal,
+	Boss,
+	TypeNum,
+	None,
 };
 
 class EnemyFactory final {

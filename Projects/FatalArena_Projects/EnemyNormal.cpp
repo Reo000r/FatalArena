@@ -23,8 +23,9 @@ namespace {
 	constexpr int kReactCooltimeFrame = 30;						// 無敵時間
 
 	constexpr float kAttackPower = 200.0f;						// 攻撃力
-	
 	constexpr int kAddScore = 1000;								// 加算スコア
+	
+	constexpr float kChaseDist = 1200.0f;						// 追い始める距離
 
 	// 当たり判定のパラメータ
 	const float kColRadius = 60.0f * kModelScale.x;		// 半径
@@ -33,6 +34,7 @@ namespace {
 
 	const std::wstring kAnimName = L"Armature|Animation_";
 	const std::wstring kAnimNameSpawn = kAnimName + L"Emote";
+	const std::wstring kAnimNameIdle = kAnimName + L"Idle";
 	const std::wstring kAnimNameChase = kAnimName + L"Chase";
 	const std::wstring kAnimNameAttack = kAnimName + L"Attack";
 	const std::wstring kAnimNameDamage = kAnimName + L"React";
@@ -79,6 +81,7 @@ EnemyNormal::EnemyNormal(int modelHandle) :
 
 	// 使用するアニメーションを全て入れる
 	_animator->SetAnimData(kAnimNameSpawn,	kBaseAnimSpeed, false);
+	_animator->SetAnimData(kAnimNameIdle, kBaseAnimSpeed, true);
 	_animator->SetAnimData(kAnimNameChase,	kBaseAnimSpeed, true);
 	_animator->SetAnimData(kAnimNameAttack, kBaseAnimSpeed, false);
 	_animator->SetAnimData(kAnimNameDamage, kDamageAnimSpeed, false);
@@ -237,9 +240,19 @@ void EnemyNormal::CheckStateTransition()
 	if (_nowUpdateState == &EnemyNormal::UpdateSpawning) {
 		// アニメーションが終了したら、追跡状態に移行
 		if (_animator->IsEnd(kAnimNameSpawn)) {
-			_state = State::Active;
-			_nowUpdateState = &EnemyNormal::UpdateChase;
-			_animator->ChangeAnim(kAnimNameChase, true);
+			float dist = (GetPos() - _player.lock()->GetPos()).Magnitude();
+			if (dist <= kChaseDist) {
+				// プレイヤーを追い始める
+				_state = State::Active;
+				_nowUpdateState = &EnemyNormal::UpdateChase;
+				_animator->ChangeAnim(kAnimNameChase, true);
+			}
+			else {
+				// 待機する
+				_state = State::Active;
+				_nowUpdateState = &EnemyNormal::UpdateIdle;
+				_animator->ChangeAnim(kAnimNameIdle, true);
+			}
 		}
 		return; // 出現中は他の状態に遷移しない
 	}
@@ -275,10 +288,10 @@ void EnemyNormal::CheckStateTransition()
 
 	// プレイヤー情報の確認
 	if (_player.expired()) {
-		// もしプレイヤーがいない場合、追跡状態に戻る
-		if (_nowUpdateState != &EnemyNormal::UpdateChase) {
-			_nowUpdateState = &EnemyNormal::UpdateChase;
-			_animator->ChangeAnim(kAnimNameChase, true);
+		// もしプレイヤーがいない場合、待機状態に戻る
+		if (_nowUpdateState != &EnemyNormal::UpdateIdle) {
+			_nowUpdateState = &EnemyNormal::UpdateIdle;
+			_animator->ChangeAnim(kAnimNameIdle, true);
 		}
 		return;
 	}
@@ -324,10 +337,19 @@ void EnemyNormal::CheckStateTransition()
 	}
 
 	// 追跡状態
-	// 上記のいずれでもなければ
-	if (_nowUpdateState != &EnemyNormal::UpdateChase) {
+	// プレイヤーが追跡範囲内にいれば追跡する
+	if (_nowUpdateState != &EnemyNormal::UpdateChase &&
+		distance <= kChaseDist) {
 		_nowUpdateState = &EnemyNormal::UpdateChase;
 		_animator->ChangeAnim(kAnimNameChase, true);
+		return;
+	}
+
+	// それ以外の場合、待機状態に戻る
+	if (_nowUpdateState != &EnemyNormal::UpdateIdle &&
+		distance > kChaseDist) {
+		_nowUpdateState = &EnemyNormal::UpdateIdle;
+		_animator->ChangeAnim(kAnimNameIdle, true);
 	}
 }
 
@@ -349,6 +371,12 @@ void EnemyNormal::UpdateSpawning()
 		// スケールを線形補間
 		MV1SetScale(_animator->GetModelHandle(), kModelScale * progress);
 	}
+}
+
+void EnemyNormal::UpdateIdle()
+{
+	// プレイヤーの方向を向く
+	RotateToPlayer();
 }
 
 void EnemyNormal::UpdateChase()

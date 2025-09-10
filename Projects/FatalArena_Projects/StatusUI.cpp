@@ -10,7 +10,7 @@
 
 namespace {
 	// プレイヤーHPバー
-	const int kPlayerHpBarPosX = Statistics::kScreenWidth * 0.02f;
+	constexpr int kPlayerHpBarPosX = Statistics::kScreenWidth * 0.02f;
 	constexpr int kPlayerHpBarPosY = Statistics::kScreenHeight * 0.05f;
 	constexpr int kPlayerHpBarWidth = Statistics::kScreenWidth * 0.3f;
 	constexpr int kPlayerHpBarHeight = Statistics::kScreenHeight * 0.05f;
@@ -20,7 +20,7 @@ namespace {
 	const unsigned int kPlayerHpBarFrameColor = GetColor(255, 255, 255);
 	
 	// プレイヤースタミナバー
-	const int kPlayerStaminaBarPosX = Statistics::kScreenWidth * 0.02f;
+	constexpr int kPlayerStaminaBarPosX = Statistics::kScreenWidth * 0.02f;
 	constexpr int kPlayerStaminaBarPosY = kPlayerHpBarPosY + Statistics::kScreenHeight * (0.05f + 0.01f);
 	constexpr int kPlayerStaminaBarWidth = Statistics::kScreenWidth * 0.3f;
 	constexpr int kPlayerStaminaBarHeight = Statistics::kScreenHeight * 0.05f;
@@ -40,9 +40,9 @@ namespace {
 
 
 	// スコア表示
-	const int kScoreFontSize = Statistics::kScreenWidth * 0.038f;
-	const int kScorePosX = Statistics::kScreenWidth - kScoreFontSize * 2;	// 描画位置
-	const int kScorePosY = kScoreFontSize * 0.75f;
+	constexpr int kScoreFontSize = Statistics::kScreenWidth * 0.038f;
+	constexpr int kScorePosX = Statistics::kScreenWidth - kScoreFontSize * 2;	// 描画位置
+	constexpr int kScorePosY = kScoreFontSize * 0.75f;
 	const unsigned int kScoreColor = GetColor(255, 255, 255);
 	const std::wstring kScoreFontName = L"Impact"; // フォント名
 }
@@ -80,11 +80,6 @@ void StatusUI::Update()
 
 void StatusUI::Draw()
 {
-	DrawScore();
-
-	DrawPlayerHp();
-	DrawPlayerStamina();
-
 	// 敵HP描画
 	if (auto enemyManager = _enemyManager.lock()) {
 		const auto& enemies = enemyManager->GetEnemies();
@@ -94,6 +89,11 @@ void StatusUI::Draw()
 			}
 		}
 	}
+
+	DrawScore();
+
+	DrawPlayerHp();
+	DrawPlayerStamina();
 }
 
 void StatusUI::DrawPlayerHp()
@@ -102,7 +102,6 @@ void StatusUI::DrawPlayerHp()
 		float maxHp = player->GetMaxHitPoint();
 		if (maxHp <= 0.0f) return;
 		float playerHitPoint = _player.lock()->GetHitPoint();
-		//if (playerHitPoint <= 0.0f) return;
 
 		// HPの割合を計算
 		float hpRatio = playerHitPoint / maxHp;

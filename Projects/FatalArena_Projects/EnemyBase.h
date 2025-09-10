@@ -7,6 +7,7 @@ class Player;
 class Animator;
 class Physics;
 class WeaponEnemy;
+enum class EnemyType;
 
 class EnemyBase abstract : public Collider
 {
@@ -41,6 +42,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	State GetState() const { return _state; }
+
+	/// <summary>
+	/// 敵タイプを返す
+	/// </summary>
+	/// <returns></returns>
+	virtual EnemyType GetType() const abstract;
 
 	float GetHitPoint() const { return _hitPoint; }
 	virtual float GetMaxHitPoint() const abstract;

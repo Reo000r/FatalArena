@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Vector3.h"
 #include <vector>
 #include <memory>
 
@@ -8,6 +9,7 @@ class Player;
 class Physics;
 struct SpawnInfo;
 struct WaveData;
+enum class EnemyType;
 
 class EnemyManager
 {
@@ -47,6 +49,16 @@ public:
 	/// </summary>
 	/// <returns>敵のリスト</returns>
 	const std::vector<std::shared_ptr<EnemyBase>>& GetEnemies() const;
+
+	/// <summary>
+	/// 指定された位置から最も近い敵を返す
+	/// EnemyType::Noneを指定するとすべての敵を候補にする
+	/// </summary>
+	/// <param name="pos">比較位置</param>
+	/// <param name="type">候補</param>
+	/// <param name="isDead">死亡している敵も判定に含めるか</param>
+	/// <returns></returns>
+	std::weak_ptr<EnemyBase> GetNearestEnemy(Position3 pos, EnemyType type, bool isDead);
 
 private:
 	/// <summary>

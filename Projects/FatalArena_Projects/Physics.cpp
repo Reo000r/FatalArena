@@ -176,6 +176,7 @@ std::list<Physics::OnCollideInfo> Physics::CheckCollide() const
 							}
 						}
 						if (!hasPrimaryInfo) {
+							// MEMO:(実体作って入れるよりこっちの方が速そう)
 							onCollideInfo.push_back({ primary, secondary });
 						}
 						if (!hasSecondaryInfo) {

@@ -168,9 +168,6 @@
     <ClCompile Include="ResultItemDrawer.cpp">
       <Filter>System\SceneResult</Filter>
     </ClCompile>
-    <ClCompile Include="StatusUI.cpp">
-      <Filter>System\SceneGamePlay</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -244,6 +241,9 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="PlayerBuffGaugeDrawer.cpp">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusUI.cpp">
       <Filter>System\SceneGamePlay</Filter>
     </ClCompile>
   </ItemGroup>
@@ -356,9 +356,6 @@
     <ClInclude Include="ResultItemDrawer.h">
       <Filter>System\SceneResult</Filter>
     </ClInclude>
-    <ClInclude Include="StatusUI.h">
-      <Filter>System\SceneGamePlay</Filter>
-    </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -435,6 +432,9 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBuffGaugeDrawer.h">
+      <Filter>System\SceneGamePlay</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusUI.h">
       <Filter>System\SceneGamePlay</Filter>
     </ClInclude>
   </ItemGroup>

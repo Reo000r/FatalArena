@@ -13,12 +13,12 @@
 
 namespace {
 	const std::wstring kModelPath = L"data/model/field/Arena.mv1";
-	const Vector3 kModelScale = Vector3(1.5f, 1.5f, 1.5f) * 0.5f;
+	constexpr float kModelScaleMul = 0.75f;
+	const Vector3 kModelScale = Vector3(1.0f * kModelScaleMul, 0.75f, 1.0f * kModelScaleMul);
 
 	const Vector3 kStartToEnd = Vector3(0.0f, 1000.0f, 0.0f);
-	constexpr int kColInnerRadius = 2240;	// 内側の半径
-	constexpr int kColOuterRadius = 3240;	// 外側の半径
-
+	constexpr int kColInnerRadius = static_cast<int>(2985 * kModelScaleMul);	// 内側の半径
+	constexpr int kColOuterRadius = static_cast<int>(4320 * kModelScaleMul);	// 外側の半径
 }
 
 Arena::Arena() :

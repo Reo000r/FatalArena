@@ -7,6 +7,7 @@ class Camera;
 class Animator;
 class WeaponPlayer;
 class PlayerBuffManager;
+class EnemyManager;
 class Physics;
 
 /// <summary>
@@ -18,7 +19,7 @@ public:
 	~Player();
 
 	void Init(std::weak_ptr<Camera> camera, std::weak_ptr<Physics> physics, 
-		std::weak_ptr<PlayerBuffManager> playerBuffManager);
+		std::weak_ptr<PlayerBuffManager> playerBuffManager, std::weak_ptr<EnemyManager> enemyManager);
 	void Update();
 	void Draw();
 
@@ -118,13 +119,20 @@ private:
 	/// <returns>減らせるかどうか</returns>
 	bool CanStaminaDecreace();
 
+	/// <summary>
+	/// プレイヤーの向いている方向に踏み込み行動を行う
+	/// </summary>
+	void Step(float stepAmount);
+
 	std::unique_ptr<Animator> _animator;
 
 	std::weak_ptr<Camera> _camera;
+	std::weak_ptr<EnemyManager> _enemyManager;
 
 	std::shared_ptr<WeaponPlayer> _weapon;
 	std::weak_ptr<PlayerBuffManager> _buffManager;
 
+	int _frameCount;
 	float _rotAngle;
 	//Matrix4x4 _rotMtx;
 	Quaternion _quaternion;

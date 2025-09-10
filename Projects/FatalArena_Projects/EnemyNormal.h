@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "EnemyBase.h"
+#include "EnemyFactory.h"
 
 /// <summary>
 /// 無難な行動を行う敵
@@ -13,6 +14,12 @@ public:
 	void Init(std::weak_ptr<Player> player, std::weak_ptr<Physics> physics) override;
 	void Update() override;
 	void Draw() override;
+
+	/// <summary>
+	/// 敵タイプを返す
+	/// </summary>
+	/// <returns></returns>
+	EnemyType GetType() const override { return EnemyType::Normal; }
 
 	float GetMaxHitPoint() const override;
 	float GetAttackPower() const override;
@@ -46,6 +53,10 @@ private:
 	/// 出現
 	/// </summary>
 	void UpdateSpawning();
+	/// <summary>
+	/// 対象が追跡距離に入るまで待機
+	/// </summary>
+	void UpdateIdle();
 	/// <summary>
 	/// 対象を追いかける
 	/// </summary>

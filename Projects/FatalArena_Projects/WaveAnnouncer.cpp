@@ -21,6 +21,7 @@ WaveAnnouncer::WaveAnnouncer() :
     _isDisplaying(false),
     _displayTimer(0),
     _currentWave(0),
+    _maxWave(0),
     _fontHandle(-1)
 {
     // フォントの作成
@@ -64,15 +65,13 @@ void WaveAnnouncer::Draw()
     if (_displayTimer < kFadeInDuration)
     {
         // フェードイン
-        alpha = static_cast<int>(255.0f * (_displayTimer / static_cast<float
-        >(kFadeInDuration)));
+        alpha = static_cast<int>(255.0f * (_displayTimer / static_cast<float>(kFadeInDuration)));
     }
     else if (_displayTimer > kDisplayDuration - kFadeOutDuration)
     {
         // フェードアウト
         int remainingTime = kDisplayDuration - _displayTimer;
-        alpha = static_cast<int>(255.0f * (remainingTime / static_cast<float
-        >(kFadeOutDuration)));
+        alpha = static_cast<int>(255.0f * (remainingTime / static_cast<float>(kFadeOutDuration)));
     }
 
     // 描画ブレンドモードをアルファブレンドに設定
@@ -80,22 +79,23 @@ void WaveAnnouncer::Draw()
 
     // 描画処理
     int textWidth = GetDrawFormatStringWidthToHandle(
-        _fontHandle, L"Wave %d", _currentWave);
+        _fontHandle, L"Wave  %d / %d", _currentWave, _maxWave);
     int drawX = (Statistics::kScreenWidth - textWidth) / 2;
     int drawY = Statistics::kScreenHeight / 3;
 
     DrawFormatStringToHandle(
         drawX, drawY, 
         kFontColor, _fontHandle, 
-        L"Wave %d", _currentWave);
+        L"Wave  %d / %d", _currentWave, _maxWave);
 
     // 描画ブレンドモードを元に戻す
     SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
-void WaveAnnouncer::Start(int currentWave)
+void WaveAnnouncer::Start(int currentWave, int maxWave)
 {
     _currentWave = currentWave;
+    _maxWave = maxWave;
     _isDisplaying = true;
     _displayTimer = 0;
 

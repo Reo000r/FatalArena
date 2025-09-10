@@ -9,6 +9,9 @@
 #include "Calculation.h"
 #include "ItemFactory.h"
 #include "PlayerBuffManager.h"
+#include "EnemyManager.h"
+#include "EnemyFactory.h"
+#include "EnemyBase.h"
 #include "PlayerReinforcementManager.h"
 #include "GameManager.h"
 #include "Arena.h"
@@ -42,6 +45,9 @@ namespace {
 	constexpr float kStaminaRecoveryFrame = 120.0f;		// スタミナが最大回復までにかかる時間
 	constexpr float kStaminaRecoveryAmount = 1.0f / kStaminaRecoveryFrame * kMaxStamina;	// 1f当たりのスタミナ回復量
 	constexpr float kStaminaDecreaceAmount = 20.0f;		// スタミナ減少量
+	
+	constexpr float kMaxStepTriggerDist = 1200.0f;		// 踏み込みを行う最大距離
+	constexpr float kStepAmount = 70.0f;				// 踏み込み量
 
 	const std::wstring kAnimName = L"Armature|Animation_";
 	const std::wstring kAnimNameIdle =			kAnimName + L"Idle";
@@ -62,6 +68,7 @@ namespace {
 	const std::wstring kAnimNameAppeal =		kAnimName + L"WinAnim";
 
 	constexpr float kBaseAnimSpeed = 1.0f;
+	constexpr float kRunAnimSpeed = 1.3f;
 	constexpr float kAttackAnim1Speed = 0.7f;
 	constexpr float kAttackAnim2Speed = 0.8f;
 	constexpr float kAttackAnim3Speed = 0.8f;
@@ -114,8 +121,10 @@ Player::Player() :
 	_nowUpdateState(&Player::UpdateIdle),
 	_animator(std::make_unique<Animator>()),
 	_camera(),
+	_enemyManager(),
 	_weapon(std::make_unique<WeaponPlayer>()),
 	_buffManager(),
+	_frameCount(0),
 	_rotAngle(kStartPlayerRotAmount),
 	_quaternion(),
 	_hasDerivedAttackInput(false),
@@ -155,7 +164,7 @@ Player::Player() :
 	// 使用するアニメーションを全て入れる
 	_animator->SetAnimData(kAnimNameIdle,			kBaseAnimSpeed, true);
 	_animator->SetAnimData(kAnimNameWalk,			kBaseAnimSpeed, true);
-	_animator->SetAnimData(kAnimNameRun,			kBaseAnimSpeed, true);
+	_animator->SetAnimData(kAnimNameRun,			kRunAnimSpeed, true);
 	_animator->SetAnimData(kAnimNameAttackNormal,	kBaseAnimSpeed, false);
 	_animator->SetAnimData(kAnimNameAttackBack,		kBaseAnimSpeed, false);
 	_animator->SetAnimData(kAnimNameAttackCombo1,	kAttackAnim1Speed, false, kAttackCombo1InputStart, kAttackCombo1InputEnd);
@@ -179,9 +188,10 @@ Player::~Player()
 }
 
 void Player::Init(std::weak_ptr<Camera> camera, std::weak_ptr<Physics> physics, 
-	std::weak_ptr<PlayerBuffManager> playerBuffManager)
+	std::weak_ptr<PlayerBuffManager> playerBuffManager, std::weak_ptr<EnemyManager> enemyManager)
 {
 	_camera = camera;
+	_enemyManager = enemyManager;
 	_buffManager = playerBuffManager;
 	MV1SetRotationXYZ(_animator->GetModelHandle(), Vector3(0, _rotAngle, 0));
 
@@ -216,6 +226,8 @@ void Player::Update()
 	if (IsAlive()) {
 		// 状態遷移確認
 		CheckStateTransition();
+
+		_frameCount++;
 
 		// 現在のステートに応じたUpdateが行われる
 		(this->*_nowUpdateState)();
@@ -310,6 +322,7 @@ void Player::TakeDamage(float damage, std::shared_ptr<Collider> attacker)
 			if (_nowUpdateState != &Player::UpdateDeath) {
 				_nowUpdateState = &Player::UpdateDeath;
 				_animator->ChangeAnim(kAnimNameDead, false);
+				_frameCount = 0;
 				SoundManager::GetInstance().PlaySoundType(SEType::PlayerDeath);
 			}
 			return;
@@ -325,6 +338,7 @@ void Player::TakeDamage(float damage, std::shared_ptr<Collider> attacker)
 		else {
 			_nowUpdateState = &Player::UpdateDamage;
 			_animator->ChangeAnim(kAnimNameReact, false);
+			_frameCount = 0;
 			_hasDerivedAttackInput = false;		// 攻撃コンボをリセット
 		}
 	}
@@ -353,6 +367,7 @@ void Player::CheckStateTransition()
 		if (_nowUpdateState != &Player::UpdateDeath) {
 			_nowUpdateState = &Player::UpdateDeath;
 			_animator->ChangeAnim(kAnimNameDead, false);
+			_frameCount = 0;
 			// 武器の当たり判定を無効化
 			_weapon->SetCollisionState(false);
 		}
@@ -392,29 +407,8 @@ void Player::CheckStateTransition()
 				StaminaDecreace();
 				// 攻撃効果音を鳴らしていない状態にする
 				_isPlayAttackSound = false;
-				// 攻撃の度に入力方向を測定し、入力があればその方向に向かせる
-				// スティック入力があるか
-				bool stickInputState = (stick.Magnitude() >= 0.005f);
-
-				// スティック入力がないかつ
-				// スティックではない入力があった場合、そちらを優先する
-				if (!stickInputState && (
-					input.IsPress("Gameplay:Up") ||
-					input.IsPress("Gameplay:Down") ||
-					input.IsPress("Gameplay:Left") ||
-					input.IsPress("Gameplay:Right")))
-				{
-					// xが横、zが縦
-					stick = Vector3();
-					if (input.IsPress("Gameplay:Up"))		stick += Vector3(0, 0, -1);
-					if (input.IsPress("Gameplay:Down"))		stick += Vector3(0, 0, +1);
-					if (input.IsPress("Gameplay:Left"))		stick += Vector3(-1, 0, 0);
-					if (input.IsPress("Gameplay:Right"))	stick += Vector3(+1, 0, 0);
-
-					stick.Normalized();
-				}
-
-				// 入力があった場合のみキャラクターの向きを変更
+				
+				// 入力があった場合キャラクターの向きを変更
 				if (stick.x != 0.0f || stick.z != 0.0f) {
 					// カメラの向きを考慮しつつ目標の角度を計算
 					const float cameraRot = _camera.lock()->GetRotAngleY();
@@ -431,17 +425,36 @@ void Player::CheckStateTransition()
 					// 適用
 					MV1SetRotationXYZ(_animator->GetModelHandle(), Vector3(0, _rotAngle, 0));
 				}
+
+				// 最寄りの敵を取得し距離が一定以下ならそちらを向く
+				std::weak_ptr<EnemyBase> enemy = _enemyManager.lock()->GetNearestEnemy(GetPos(), EnemyType::None, false);
+				// 帰ってきた敵が有効なら処理を行う
+				if (enemy.lock()) {
+					Vector3 playerToEnemy = GetPos() - enemy.lock()->GetPos();
+					float dist = playerToEnemy.Magnitude();
+					if (dist <= kMaxStepTriggerDist) {
+						// 距離が0でなければ
+						if (playerToEnemy.SqrMagnitude() > 0.0f) {
+							// Y軸の回転角度を計算し、モデルの向きに反映する
+							_rotAngle = atan2f(playerToEnemy.x, playerToEnemy.z);
+							MV1SetRotationXYZ(_animator->GetModelHandle(), Vector3(0, _rotAngle, 0));
+						}
+					}
+				}
+
 				// どの攻撃からの派生か
 				if (_nowUpdateState == &Player::UpdateAttackFirst) {
 					_nowUpdateState = &Player::UpdateAttackSecond;
 					_animator->ChangeAnim(kAnimNameAttackCombo2, false);
 					_hasDerivedAttackInput = false;
+					_frameCount = 0;
 					return; // 遷移したので処理終了
 				}
 				else if (_nowUpdateState == &Player::UpdateAttackSecond) {
 					_nowUpdateState = &Player::UpdateAttackThird;
 					_animator->ChangeAnim(kAnimNameAttackCombo3, false);
 					_hasDerivedAttackInput = false;
+					_frameCount = 0;
 					return; // 遷移したので処理終了
 				}
 			}
@@ -453,14 +466,17 @@ void Player::CheckStateTransition()
 			if (CanRunInput()) {
 				_nowUpdateState = &Player::UpdateDash;
 				_animator->ChangeAnim(kAnimNameRun, true);
+				_frameCount = 0;
 			}
 			else if (CanWalkInput()) {
 				_nowUpdateState = &Player::UpdateWalk;
 				_animator->ChangeAnim(kAnimNameWalk, true);
+				_frameCount = 0;
 			}
 			else {
 				_nowUpdateState = &Player::UpdateIdle;
 				_animator->ChangeAnim(kAnimNameIdle, true);
+				_frameCount = 0;
 			}
 			return;
 		}
@@ -484,9 +500,45 @@ void Player::CheckStateTransition()
 		_nowUpdateState = &Player::UpdateAttackFirst;
 		_animator->ChangeAnim(kAnimNameAttackCombo1, false);
 		_hasDerivedAttackInput = false;
+		_frameCount = 0;
 		StaminaDecreace();
 		// 攻撃効果音を鳴らしていない状態にする
 		_isPlayAttackSound = false;
+
+		// 入力があった場合キャラクターの向きを変更
+		if (stick.x != 0.0f || stick.z != 0.0f) {
+			// カメラの向きを考慮しつつ目標の角度を計算
+			const float cameraRot = _camera.lock()->GetRotAngleY();
+			float targetAngle = atan2f(stick.z, stick.x) + -cameraRot + DX_PI_F * 0.5f;
+
+			// 現在の角度から目標角度までの最短差分を計算
+			float diff = targetAngle - _rotAngle;
+
+			// 更新
+			_rotAngle += diff;
+
+			// 現在の角度も正規化しておく
+			Calc::RadianNormalize(_rotAngle);
+			// 適用
+			MV1SetRotationXYZ(_animator->GetModelHandle(), Vector3(0, _rotAngle, 0));
+		}
+
+		// 最寄りの敵を取得し距離が一定以下ならそちらを向く
+		std::weak_ptr<EnemyBase> enemy = _enemyManager.lock()->GetNearestEnemy(GetPos(), EnemyType::None, false);
+		// 帰ってきた敵が有効なら処理を行う
+		if (enemy.lock()) {
+			Vector3 playerToEnemy = GetPos() - enemy.lock()->GetPos();
+			float dist = playerToEnemy.Magnitude();
+			if (dist <= kMaxStepTriggerDist) {
+				// 距離が0でなければ
+				if (playerToEnemy.SqrMagnitude() > 0.0f) {
+					// Y軸の回転角度を計算し、モデルの向きに反映する
+					_rotAngle = atan2f(playerToEnemy.x, playerToEnemy.z);
+					MV1SetRotationXYZ(_animator->GetModelHandle(), Vector3(0, _rotAngle, 0));
+				}
+			}
+		}
+
 		return;
 	}
 
@@ -497,6 +549,7 @@ void Player::CheckStateTransition()
 		if (_nowUpdateState != &Player::UpdateDash) {
 			_nowUpdateState = &Player::UpdateDash;
 			_animator->ChangeAnim(kAnimNameRun, true);
+			_frameCount = 0;
 			// 武器の当たり判定を無効化
 			_weapon->SetCollisionState(false);
 		}
@@ -510,6 +563,7 @@ void Player::CheckStateTransition()
 		if (_nowUpdateState != &Player::UpdateWalk) {
 			_nowUpdateState = &Player::UpdateWalk;
 			_animator->ChangeAnim(kAnimNameWalk, true);
+			_frameCount = 0;
 			// 武器の当たり判定を無効化
 			_weapon->SetCollisionState(false);
 		}
@@ -522,6 +576,7 @@ void Player::CheckStateTransition()
 		if (_nowUpdateState != &Player::UpdateIdle) {
 			_nowUpdateState = &Player::UpdateIdle;
 			_animator->ChangeAnim(kAnimNameIdle, true);
+			_frameCount = 0;
 			// 武器の当たり判定を無効化
 			_weapon->SetCollisionState(false);
 		}
@@ -654,9 +709,15 @@ void Player::UpdateAttackFirst()
 	// アニメーションの現在のフレームを取得
 	float currentFrame = _animator->GetCurrentAnimFrame();
 	// 現在のアニメーションデータから入力受付期間を取得
-	const Animator::AnimData& currentAnimData = _animator->FindAnimData(_animator->
-		GetCurrentAnimName());
+	const Animator::AnimData& currentAnimData = _animator->FindAnimData(_animator->GetCurrentAnimName());
 	
+	const int maxStepFrameCount = static_cast<int>(currentAnimData.totalFrame * (0.1f*2));
+	// 踏み込みが行えるカウントなら
+	if (_frameCount <= maxStepFrameCount) {
+		// 踏み込みを行う
+		Step(kStepAmount*0.8f);
+	}
+
 	// 入力受付期間内かつ
 	// 再生された瞬間ではないかつ
 	// 攻撃ボタンが押されたら
@@ -686,6 +747,13 @@ void Player::UpdateAttackSecond()
 	const Animator::AnimData& currentAnimData = 
 		_animator->FindAnimData(_animator->GetCurrentAnimName());
 
+	const int maxStepFrameCount = static_cast<int>(currentAnimData.totalFrame * 0.1f);
+	// 踏み込みが行えるカウントなら
+	if (_frameCount <= maxStepFrameCount) {
+		// 踏み込みを行う
+		Step(kStepAmount);
+	}
+
 	// 入力受付期間内かつ、攻撃ボタンが押されたら次の攻撃へ派生可能にする
 	if (currentAnimData.animName == kAnimNameAttackCombo2 &&
 		currentFrame >= currentAnimData.inputAcceptanceStartFrame &&
@@ -710,6 +778,13 @@ void Player::UpdateAttackThird()
 	// 現在のアニメーションデータ(入力受付期間取得用)
 	const Animator::AnimData& currentAnimData =
 		_animator->FindAnimData(_animator->GetCurrentAnimName());
+
+	const int maxStepFrameCount = static_cast<int>(currentAnimData.totalFrame * 0.1f);
+	// 踏み込みが行えるカウントなら
+	if (_frameCount <= maxStepFrameCount) {
+		// 踏み込みを行う
+		Step(kStepAmount);
+	}
 
 	if (!_isPlayAttackSound &&
 		currentAnimData.animName == kAnimNameAttackCombo3 &&
@@ -940,5 +1015,35 @@ bool Player::CanStaminaDecreace()
 {
 	// スタミナが減少量より少ない場合は減らさない
 	return (_stamina >= kStaminaDecreaceAmount);
+}
+
+void Player::Step(float stepAmount)
+{
+	// プレイヤーの向いている前方ベクトルを計算
+	Vector3 forward = Vector3(sinf(_rotAngle), 0.0f, cosf(_rotAngle)) * -1.0f;
+	forward.Normalized();
+
+	// 移動量を設定
+	Vector3 vel = forward * stepAmount;
+
+	// 現在の位置と速度から次のフレームの予測位置を計算
+	Position3 nextPos = GetPos() + vel;
+
+	// 予測位置の原点からのXZ平面上の距離を計算
+	Vector2 xzPos(nextPos.x, nextPos.z);
+	float distanceFromOrigin = xzPos.Magnitude();
+
+	// 指定の距離を超えていたら制限する
+	const float maxDistance = Arena::GetArenaRadius() - kColRadius;
+	if (distanceFromOrigin > maxDistance) {
+		// 予測位置を指定の円周上に補正
+		Vector2 normalized = xzPos.Normalize();
+		nextPos.x = normalized.x * maxDistance;
+		nextPos.z = normalized.y * maxDistance;
+	}
+
+	// 現在位置から補正後の予測位置へ向かう新しい速度を計算し、設定する
+	Vector3 newVel = nextPos - GetPos();
+	rigidbody->SetVel(newVel);
 }
 

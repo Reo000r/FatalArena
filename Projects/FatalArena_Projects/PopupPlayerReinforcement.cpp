@@ -20,8 +20,8 @@ namespace {
 	//const std::wstring kPadEnterText = L"強化内容を選べ！\n Aボタンで決定";
 	//const std::wstring kKeybdEnterText = L" 強化内容を選べ！\nエンターキーで決定";
 	const std::wstring kHeadingText = L"Reinforcement   Phase";
-	const std::wstring kPadEnterText = L"Choose the Power Your Want!\n          Press A to Confirm";
-	const std::wstring kKeybdEnterText = L"Choose the Power Your Want!\n      Press Enter to Confirm";
+	const std::wstring kPadEnterText = L"Choose the Power You Want!\n          Press A to Confirm";
+	const std::wstring kKeybdEnterText = L"Choose the Power You Want!\n      Press Enter to Confirm";
 
 	// 描画レイアウト用の定数
 	constexpr int kHeadingTextY = Statistics::kScreenHeight * 0.1f;						// 見出し文字のY座標

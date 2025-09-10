@@ -16,14 +16,20 @@ namespace {
 		{ L"data/graph/billboard/Audience6.png" },
 	};
 
-	const std::vector<int> kDrawAmount = {
-		24, 28, 32, 36
-	};
+	constexpr float kAudienceNumMul = 0.8f;		// 観客数倍率
 
-	constexpr float kSpawnRadius = 2800.0f;
-	constexpr float kAddSpawnRadius = 400.0f;
-	constexpr float kSpawnHeight = 700.0f;
-	constexpr float kAddSpawnHeight = 250.0f;
+	const std::vector<int> kDrawAmount = {
+		static_cast<int>(72 * kAudienceNumMul), 
+		static_cast<int>(84 * kAudienceNumMul),
+		static_cast<int>(96 * kAudienceNumMul),
+		static_cast<int>(108 * kAudienceNumMul),
+	};
+	constexpr int kPosOffsetAmount = 10;		// 位置補正量
+
+	constexpr float kSpawnRadius = 2800.0f;		// 最も内側の円の半径
+	constexpr float kAddSpawnRadius = 400.0f;	// 円の半径補正量
+	constexpr float kSpawnHeight = 700.0f;		// 生成高度
+	constexpr float kAddSpawnHeight = 250.0f;	// 生成高度補正量
 }
 
 BillboardManager::BillboardManager() :
@@ -39,8 +45,8 @@ BillboardManager::~BillboardManager()
 
 void BillboardManager::Init()
 {
-	float radius = kSpawnRadius;	// 外周に生成
-	float spawnHeight = kSpawnHeight;	// 外周に生成
+	float radius = kSpawnRadius;		// 生成する円周の半径
+	float spawnHeight = kSpawnHeight;	// 生成高度
 	for (const int num : kDrawAmount) {
 		float audDistAngle = static_cast<float>(Calc::ToRadian(360) / num);
 		for (int i = 0; i < num; ++i) {
@@ -49,6 +55,8 @@ void BillboardManager::Init()
 			float angle = audDistAngle * i;
 			// 原点を中心に生成
 			Position3 spawnPos = Vector3(cos(angle) * radius, spawnHeight, sin(angle) * radius);
+			Position3 spawnPosOffset = 
+				Vector3(GetRand(kPosOffsetAmount - 1), GetRand(kPosOffsetAmount - 1), GetRand(kPosOffsetAmount - 1));
 			int audienceNum = GetRand((int)kGraphPaths.size() - 1);
 			// 観客を生成
 			SpawnAudience(spawnPos, LoadGraph(kGraphPaths[audienceNum].c_str()));
@@ -56,7 +64,6 @@ void BillboardManager::Init()
 		radius += kAddSpawnRadius;
 		spawnHeight += kAddSpawnHeight;
 	}
-	
 }
 
 void BillboardManager::Update()
